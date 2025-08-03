@@ -3,6 +3,9 @@ package main
 import (
 	"flag"
 	"fmt"
+	"os"
+
+	"github.com/abuwho/md2html/utils"
 )
 
 func main() {
@@ -12,4 +15,11 @@ func main() {
 	flag.Parse()
 
 	fmt.Println(*source, *destination)
+	content, err := utils.ReadSourceFile(*source)
+	if err != nil {
+		fmt.Println("Error: ", err)
+		os.Exit(1)
+	}
+
+	utils.WriteToDestinationFile(*destination, content)
 }
