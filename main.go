@@ -11,15 +11,20 @@ import (
 func main() {
 	source := flag.String("source", "./README.md", "Source of the markdown file")
 	destination := flag.String("dest", "./result.html", "Where the result should be saved")
-
 	flag.Parse()
 
-	fmt.Println(*source, *destination)
-	content, err := utils.ReadSourceFile(*source)
-	if err != nil {
-		fmt.Println("Error: ", err)
+	// Verify file type
+	_, sourceFileTypeVerifiedErr := utils.VerifySourceFileType(*source)
+	if sourceFileTypeVerifiedErr != nil {
+		fmt.Println("Error: ", sourceFileTypeVerifiedErr)
 		os.Exit(1)
 	}
 
-	utils.WriteToDestinationFile(*destination, content)
+	fileContent, readFileErr := utils.ReadSourceFile(*source)
+	if readFileErr != nil {
+		fmt.Println("Error: ", readFileErr)
+		os.Exit(1)
+	}
+
+	utils.WriteToDestinationFile(*destination, fileContent)
 }
